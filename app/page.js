@@ -10,6 +10,8 @@ export default function Home() {
   const [inventory, setInventory] = useState([])
   const [open, setOpen] = useState(false)
   const [itemName, setItemName] = useState('')
+  const [filter, setFilter] = useState('');
+
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, 'inventory'))
@@ -61,6 +63,12 @@ export default function Home() {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+
+
+  // Filter the inventory based on the filter state
+  const filteredInventory = inventory.filter(item => 
+    item.name.toLowerCase().includes(filter.toLowerCase())
+  )
 
   return (
     <Box width="100vw" 
@@ -118,9 +126,26 @@ export default function Home() {
               Inventory Items
             </Typography>
         </Box>
+
+
+        <Box width="800px" height="50px" bgcolor="#10A0FF" display="flex" alignItems="center" justifyContent="center">
+            <Typography variant="h2" color = '#333'>
+              filter
+            </Typography>
+
+            <TextField variant='outlined'
+            fullWidth
+            onChange={(e) => {
+              setFilter(e.target.value)
+              console.log(e.target.value)
+            }}/> 
+        
+        </Box>
+
+
       <Stack width="800px" height="300px" spacing={2} overflow="auto">
         {
-          inventory.map(({name, quantity})=>(
+          filteredInventory.map(({name, quantity})=>(
             <Box 
             key={name} 
             width="100%" 
@@ -130,12 +155,18 @@ export default function Home() {
             justifyContent="space-between"
             bgcolor="#f0f0f0" 
             padding={5}>
+              
+              
               <Typography variant="h3" color='#333' textAlign="center">
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </Typography>
+              
+              
               <Typography variant="h3" color='#333' textAlign="center">
                 {quantity}
               </Typography>
+              
+              
               <Button variant="contained" onClick={()=>{
                 removeItem(name)
               }}
