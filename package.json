@@ -17,5 +17,10 @@
   "devDependencies": {
     "eslint": "^8",
     "eslint-config-next": "14.2.5"
-  }
+  },
+  "peerDependencies": {
+  "react": "^17.0.0 || ^18.0.0",
+  "react-dom": "^17.0.0 || ^18.0.0"
+}
+
 }
